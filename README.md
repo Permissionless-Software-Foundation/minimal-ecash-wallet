@@ -1,10 +1,10 @@
-# minimal-slp-wallet
+# minimal-ecash-wallet
 
-This is a minimalist Bitcoin Cash (BCH) wallet 'engine' for use with front end web apps. It contains all the core functionality needed by a wallet:
+This is a minimalist eCash (XEC) wallet 'engine' for use with front end web apps. It contains all the core functionality needed by a wallet:
 
-- Create a new BCH wallet or import a mnemonic
+- Create a new eCash wallet or import a mnemonic
 - Encrypt a wallets mnemonic for safe storage
-- Send and receive BCH
+- Send and receive XEC
 - Send and receive SLP tokens
 - Get balances and UTXOs
 - Retrieve transaction history & transaction details
