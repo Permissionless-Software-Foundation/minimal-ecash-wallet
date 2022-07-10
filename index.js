@@ -25,7 +25,7 @@ class MinimalBCHWallet {
 
     // BEGIN Handle advanced options.
     // HD Derivation path.
-    this.hdPath = this.advancedOptions.hdPath || "m/44'/245'/0'/0/0"
+    this.hdPath = this.advancedOptions.hdPath || "m/44'/1899'/0'/0/0"
 
     // bch-js options.
     const bchjsOptions = {}
@@ -114,9 +114,10 @@ class MinimalBCHWallet {
           childNode
         ).toString('hex')
         walletInfo.mnemonic = mnemonic
-        walletInfo.address = walletInfo.cashAddress = this.bchjs.HDNode.toCashAddress(
+        walletInfo.cashAddress = this.bchjs.HDNode.toCashAddress(
           childNode
         )
+        walletInfo.address = walletInfo.eCashAddress = this.bchjs.Address.toEcashAddress(walletInfo.cashAddress)
         walletInfo.legacyAddress = this.bchjs.HDNode.toLegacyAddress(childNode)
         walletInfo.hdPath = this.hdPath
 
@@ -140,9 +141,10 @@ class MinimalBCHWallet {
             'hex'
           )
           walletInfo.mnemonic = null
-          walletInfo.address = walletInfo.cashAddress = this.bchjs.ECPair.toCashAddress(
+          walletInfo.cashAddress = this.bchjs.ECPair.toCashAddress(
             ecPair
           )
+          walletInfo.address = walletInfo.eCashAddress = this.bchjs.Address.toEcashAddress(walletInfo.cashAddress)
           walletInfo.legacyAddress = this.bchjs.ECPair.toLegacyAddress(ecPair)
           walletInfo.hdPath = null
         } else {
@@ -158,9 +160,10 @@ class MinimalBCHWallet {
             childNode
           ).toString('hex')
           walletInfo.mnemonic = mnemonic
-          walletInfo.address = walletInfo.cashAddress = this.bchjs.HDNode.toCashAddress(
+          walletInfo.cashAddress = this.bchjs.HDNode.toCashAddress(
             childNode
           )
+          walletInfo.address = walletInfo.eCashAddress = this.bchjs.Address.toEcashAddress(walletInfo.cashAddress)
           walletInfo.legacyAddress = this.bchjs.HDNode.toLegacyAddress(
             childNode
           )
@@ -177,13 +180,14 @@ class MinimalBCHWallet {
       }
 
       walletInfo.slpAddress = this.bchjs.SLP.Address.toSLPAddress(
-        walletInfo.address
+        walletInfo.cashAddress
       )
+      walletInfo.eTokenAddress = this.bchjs.Address.toEtokenAddress(walletInfo.cashAddress)
 
       // Do not update the wallet UTXOs if noUpdate flag is set.
       if (!this.noUpdate) {
         // Get any  UTXOs for this wallet.
-        await this.utxos.initUtxoStore(walletInfo.address)
+        await this.utxos.initUtxoStore(walletInfo.cashAddress)
       }
 
       this.walletInfoCreated = true

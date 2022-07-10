@@ -2,19 +2,19 @@
   An example app for creating a wallet using this library.
 */
 
-const BchWallet = require('../index')
+const ECashWallet = require('../index')
 
 async function createWallet () {
   try {
     // Instantiate the wallet library.
-    const bchWallet = new BchWallet()
+    const eCashWallet = new ECashWallet()
 
     // Wait for the wallet to be created.
-    await bchWallet.walletInfoPromise
+    await eCashWallet.walletInfoPromise
 
     // Print out the wallet information.
     console.log(
-      `Wallet information: ${JSON.stringify(bchWallet.walletInfo, null, 2)}`
+      `Wallet information: ${JSON.stringify(eCashWallet.walletInfo, null, 2)}`
     )
   } catch (err) {
     console.error('Error: ', err)
