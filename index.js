@@ -27,8 +27,12 @@ class MinimalBCHWallet {
     // HD Derivation path.
     this.hdPath = this.advancedOptions.hdPath || "m/44'/1899'/0'/0/0"
 
-    // bch-js options.
-    const bchjsOptions = {}
+    // bch-js options defaults
+    const bchjsOptions = {
+      restURL: 'https://abc.fullstack.cash/v5/'
+    }
+
+    // Overwrite restURL if user specifies it.
     if (this.advancedOptions.restURL) {
       bchjsOptions.restURL = advancedOptions.restURL
     }
@@ -187,7 +191,7 @@ class MinimalBCHWallet {
       // Do not update the wallet UTXOs if noUpdate flag is set.
       if (!this.noUpdate) {
         // Get any  UTXOs for this wallet.
-        await this.utxos.initUtxoStore(walletInfo.cashAddress)
+        await this.utxos.initUtxoStore(walletInfo.address)
       }
 
       this.walletInfoCreated = true
