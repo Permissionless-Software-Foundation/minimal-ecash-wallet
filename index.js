@@ -295,7 +295,7 @@ class MinimalBCHWallet {
         outputs,
         {
           mnemonic: this.walletInfo.mnemonic,
-          cashAddress: this.walletInfo.address,
+          cashAddress: this.walletInfo.cashAddress,
           hdPath: this.walletInfo.hdPath,
           fee: this.fee
         },
