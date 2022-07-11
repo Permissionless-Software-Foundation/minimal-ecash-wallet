@@ -46,6 +46,20 @@ describe('#router.js', () => {
       assert.property(result.balance, 'confirmed')
       assert.property(result.balance, 'unconfirmed')
     })
+
+    it('should get a balance from the ecash chain using web2', async () => {
+      const bchjs = new BCHJS({ restURL: 'https://abc.fullstack.cash/v5/' })
+      uut = new Router({ bchjs, interface: 'rest-api' })
+
+      const addr = 'ecash:qr5c4hfy52zn87484cucvzle5pljz0gtr5vhtw9z09'
+
+      const result = await uut.getBalance(addr)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.equal(result.success, true)
+      assert.property(result.balance, 'confirmed')
+      assert.property(result.balance, 'unconfirmed')
+    })
   })
 
   describe('#getUtxos', () => {
@@ -65,6 +79,20 @@ describe('#router.js', () => {
       uut = new Router({ bchjs, interface: 'consumer-api' })
 
       const addr = 'bitcoincash:qrl2nlsaayk6ekxn80pq0ks32dya8xfclyktem2mqj'
+
+      const result = await uut.getUtxos(addr)
+      // console.log(`result: ${JSON.stringify(result, null, 2)}`)
+
+      assert.equal(result.address, addr)
+      assert.property(result, 'bchUtxos')
+      assert.property(result, 'slpUtxos')
+    })
+
+    it('should get UTXOs from the ecash chain using web2', async () => {
+      const bchjs = new BCHJS({ restURL: 'https://abc.fullstack.cash/v5/' })
+      uut = new Router({ bchjs, interface: 'rest-api' })
+
+      const addr = 'ecash:qr5c4hfy52zn87484cucvzle5pljz0gtr5vhtw9z09'
 
       const result = await uut.getUtxos(addr)
       // console.log(`result: ${JSON.stringify(result, null, 2)}`)

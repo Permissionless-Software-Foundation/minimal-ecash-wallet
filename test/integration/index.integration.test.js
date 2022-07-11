@@ -34,7 +34,7 @@ describe('#BchWallet', () => {
 
       assert.include(
         uut.walletInfo.cashAddress,
-        'bitcoincash:qpc7ufrzcm9ctylx6dsjwje8wx8gjdhghqn74rmmez'
+        'bitcoincash:qqxv68xtmlascjyehdy92gjph5xgxa00sq6gmttzrl'
       )
     })
   })
@@ -49,7 +49,7 @@ describe('#BchWallet', () => {
 
       assert.include(
         walletPromise.cashAddress,
-        'bitcoincash:qpc7ufrzcm9ctylx6dsjwje8wx8gjdhghqn74rmmez'
+        'bitcoincash:qqxv68xtmlascjyehdy92gjph5xgxa00sq6gmttzrl'
       )
     })
 
@@ -147,6 +147,20 @@ describe('#BchWallet', () => {
 
       assert.include(result.immutableData, 'ipfs')
       assert.include(result.mutableData, 'ipfs')
+    })
+  })
+
+  describe('#getUtxos', () => {
+    it('should get UTXOs for an ecash address', async () => {
+      uut = new BchWallet(undefined, { interface: 'rest-api', restURL: 'https://abc.fullstack.cash/v5/', noUpdate: true })
+
+      const addr = 'ecash:qr5c4hfy52zn87484cucvzle5pljz0gtr5vhtw9z09'
+
+      const result = await uut.getUtxos(addr)
+      // console.log('result: ', result)
+
+      assert.isAbove(result.bchUtxos.length, 0)
+      assert.isAbove(result.slpUtxos.type1.tokens.length, 0)
     })
   })
 })
