@@ -6,12 +6,15 @@
 const assert = require('chai').assert
 const sinon = require('sinon')
 const BCHJS = require('@psf/bch-js')
+const clone = require('lodash.clonedeep')
 
+// Local libraries
 const SendBCH = require('../../lib/send-bch')
 const AdapterRouter = require('../../lib/adapters/router')
 let uut // Unit Under Test
 
-const mockData = require('./mocks/send-bch-mocks')
+const mockDataLib = require('./mocks/send-bch-mocks')
+let mockData
 
 describe('#SendBCH', () => {
   let sandbox
@@ -27,6 +30,8 @@ describe('#SendBCH', () => {
     config.bchjs = bchjs
     config.ar = new AdapterRouter(config)
     uut = new SendBCH(config)
+
+    mockData = clone(mockDataLib)
   })
 
   afterEach(() => sandbox.restore())
@@ -184,6 +189,25 @@ describe('#SendBCH', () => {
         assert.include(err.message, 'Insufficient balance')
       }
     })
+
+    it('should use custom sorting function', () => {
+      const outputs = [
+        {
+          address: 'bitcoincash:qp2rmj8heytjrksxm2xrjs0hncnvl08xwgkweawu9h',
+          amountSat: 600
+        }
+      ]
+
+      const sortingStub = sinon.stub().returnsArg(0)
+      uut.getNecessaryUtxosAndChange(
+        outputs,
+        mockData.exampleUtxos01.utxos,
+        1.0,
+        { utxoSortingFn: sortingStub }
+      )
+
+      assert.ok(sortingStub.calledOnceWith(mockData.exampleUtxos01.utxos))
+    })
   })
 
   describe('#getKeyPairFromMnemonic', () => {
@@ -206,6 +230,20 @@ describe('#SendBCH', () => {
       // Ensure the output has the expected properties.
       assert.property(keyPair, 'compressed')
       assert.property(keyPair, 'network')
+    })
+
+    it('should throw error if wallet has neither mnemonic or private key', async () => {
+      try {
+        // Force desired code path
+        mockData.mockWallet.mnemonic = null
+        mockData.mockWallet.privateKey = null
+
+        await uut.getKeyPairFromMnemonic(mockData.mockWallet)
+
+        assert.fail('Unexpected code path')
+      } catch (err) {
+        assert.include(err.message, 'Wallet has no mnemonic or private key!')
+      }
     })
   })
 
@@ -261,6 +299,46 @@ describe('#SendBCH', () => {
       )
       // console.log('hex: ', hex)
       // console.log('txid: ', txid)
+
+      assert.isString(hex)
+      assert.isString(txid)
+    })
+
+    it('should create a tx for an eCash address', async () => {
+      const outputs = [
+        {
+          address: 'ecash:qzngwl4k3hkl8hfem6fl3sp058tsgl8xp50ke8ykxc',
+          amountSat: 625
+        }
+      ]
+
+      const { hex, txid } = await uut.createTransaction(
+        outputs,
+        mockData.mockWallet,
+        mockData.exampleUtxos01.utxos
+      )
+      console.log('hex: ', hex)
+      console.log('txid: ', txid)
+
+      assert.isString(hex)
+      assert.isString(txid)
+    })
+
+    it('should create a tx for an eToken address', async () => {
+      const outputs = [
+        {
+          address: 'etoken:qzngwl4k3hkl8hfem6fl3sp058tsgl8xp5pgs9j3z0',
+          amountSat: 625
+        }
+      ]
+
+      const { hex, txid } = await uut.createTransaction(
+        outputs,
+        mockData.mockWallet,
+        mockData.exampleUtxos01.utxos
+      )
+      console.log('hex: ', hex)
+      console.log('txid: ', txid)
 
       assert.isString(hex)
       assert.isString(txid)
