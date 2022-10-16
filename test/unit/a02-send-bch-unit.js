@@ -303,6 +303,46 @@ describe('#SendBCH', () => {
       assert.isString(hex)
       assert.isString(txid)
     })
+
+    it('should create a tx for an eCash address', async () => {
+      const outputs = [
+        {
+          address: 'ecash:qzngwl4k3hkl8hfem6fl3sp058tsgl8xp50ke8ykxc',
+          amountSat: 625
+        }
+      ]
+
+      const { hex, txid } = await uut.createTransaction(
+        outputs,
+        mockData.mockWallet,
+        mockData.exampleUtxos01.utxos
+      )
+      console.log('hex: ', hex)
+      console.log('txid: ', txid)
+
+      assert.isString(hex)
+      assert.isString(txid)
+    })
+
+    it('should create a tx for an eToken address', async () => {
+      const outputs = [
+        {
+          address: 'etoken:qzngwl4k3hkl8hfem6fl3sp058tsgl8xp5pgs9j3z0',
+          amountSat: 625
+        }
+      ]
+
+      const { hex, txid } = await uut.createTransaction(
+        outputs,
+        mockData.mockWallet,
+        mockData.exampleUtxos01.utxos
+      )
+      console.log('hex: ', hex)
+      console.log('txid: ', txid)
+
+      assert.isString(hex)
+      assert.isString(txid)
+    })
   })
 
   describe('#sendBch', () => {

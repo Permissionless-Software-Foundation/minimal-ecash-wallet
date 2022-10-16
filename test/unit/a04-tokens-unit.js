@@ -176,6 +176,66 @@ describe('#tokens', () => {
       assert.isString(txid)
     })
 
+    it('should send token with no token change and no UTXO change to an eCash address', async () => {
+      const output = {
+        address: 'ecash:qzngwl4k3hkl8hfem6fl3sp058tsgl8xp50ke8ykxc',
+        tokenId:
+          '497291b8a1dfe69c8daea50677a3d31a5ef0e9484d8bebb610dac64bbc202fb7',
+        qty: 1
+      }
+
+      const walletInfo = sendMockData.mockWallet
+
+      // Prep the utxo data.
+      utxos.utxoStore = mockData.tokenUtxos01
+      const bchUtxos = utxos.utxoStore.bchUtxos
+      const tokenUtxos = utxos.getSpendableTokenUtxos()
+      // console.log('tokenUtxos: ', tokenUtxos)
+
+      // Modify the BCH UTXO for this test.
+      // bchUtxos[0].value = bchUtxos[0].satoshis = 100000
+
+      const { hex, txid } = await uut.createTransaction(
+        output,
+        walletInfo,
+        bchUtxos,
+        tokenUtxos
+      )
+
+      assert.isString(hex)
+      assert.isString(txid)
+    })
+
+    it('should send token with no token change and no UTXO change to an eToken address', async () => {
+      const output = {
+        address: 'etoken:qzngwl4k3hkl8hfem6fl3sp058tsgl8xp5pgs9j3z0',
+        tokenId:
+          '497291b8a1dfe69c8daea50677a3d31a5ef0e9484d8bebb610dac64bbc202fb7',
+        qty: 1
+      }
+
+      const walletInfo = sendMockData.mockWallet
+
+      // Prep the utxo data.
+      utxos.utxoStore = mockData.tokenUtxos01
+      const bchUtxos = utxos.utxoStore.bchUtxos
+      const tokenUtxos = utxos.getSpendableTokenUtxos()
+      // console.log('tokenUtxos: ', tokenUtxos)
+
+      // Modify the BCH UTXO for this test.
+      // bchUtxos[0].value = bchUtxos[0].satoshis = 100000
+
+      const { hex, txid } = await uut.createTransaction(
+        output,
+        walletInfo,
+        bchUtxos,
+        tokenUtxos
+      )
+
+      assert.isString(hex)
+      assert.isString(txid)
+    })
+
     it('should send token with token change and no UTXO change', async () => {
       const output = {
         address: 'simpleledger:qqwsylce7r5ufe4mfc94xkd56t30ncnanqahwq6kvv',
