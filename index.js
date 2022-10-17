@@ -230,8 +230,8 @@ class MinimalBCHWallet {
 
     // If no address is passed in, but the wallet has been initialized, use the
     // wallet's address.
-    if (!bchAddress && this.walletInfo && this.walletInfo.cashAddress) {
-      addr = this.walletInfo.cashAddress
+    if (!bchAddress && this.walletInfo && this.walletInfo.eCashAddress) {
+      addr = this.walletInfo.eCashAddress
       return this.utxos.initUtxoStore(addr)
     }
 
@@ -386,7 +386,7 @@ class MinimalBCHWallet {
 
   // Return information on SLP tokens held by this wallet.
   listTokens (slpAddress) {
-    const addr = slpAddress || this.walletInfo.slpAddress
+    const addr = slpAddress || this.walletInfo.address
 
     return this.tokens.listTokensFromAddress(addr)
   }
