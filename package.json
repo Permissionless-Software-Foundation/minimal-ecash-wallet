@@ -37,10 +37,10 @@
   },
   "repository": "Permissionless-Software-Foundation/minimal-ecash-wallet",
   "dependencies": {
-    "@chris.troutner/retry-queue-commonjs": "^1.0.8",
+    "@chris.troutner/retry-queue-commonjs": "1.0.8",
     "@psf/bch-js": "6.5.1",
     "apidoc": "0.51.0",
-    "bch-consumer": "1.4.0",
+    "xec-consumer": "1.0.0",
     "bch-donation": "1.1.2",
     "crypto-js": "4.0.0"
   },
