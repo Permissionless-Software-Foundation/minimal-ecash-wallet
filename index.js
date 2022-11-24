@@ -30,7 +30,8 @@ class MinimalBCHWallet {
 
     // bch-js options defaults
     const bchjsOptions = {
-      restURL: 'https://abc.fullstack.cash/v5/'
+      // restURL: 'https://abc.fullstack.cash/v5/'
+      restURL: 'https://xec-consumer-or1-usa.fullstackcash.nl'
     }
 
     // Overwrite restURL if user specifies it.

@@ -12,7 +12,8 @@ let uut
 describe('#tokens.js', () => {
   beforeEach(() => {
     const config = {
-      restURL: 'https://bchn.fullstack.cash/v5/'
+      interface: 'consumer-api',
+      restURL: 'https://xec-consumer-or1-usa.fullstackcash.nl'
     }
     const bchjs = new BCHJS(config)
     config.bchjs = bchjs
@@ -21,8 +22,8 @@ describe('#tokens.js', () => {
   })
 
   describe('#listTokensFromAddress', () => {
-    it('should return tokens held by an address', async () => {
-      const addr = 'simpleledger:qqmjqwsplscmx0aet355p4l0j8q74thv7vf5epph4z'
+    it('should return tokens held by an ecash address', async () => {
+      const addr = 'ecash:qrndyd5v3c9c6xzjt9hhymq8gtf6a6p8kyy9kcreer'
 
       const tokenInfo = await uut.listTokensFromAddress(addr)
       // console.log(`tokenInfo: ${JSON.stringify(tokenInfo, null, 2)}`)
@@ -38,13 +39,30 @@ describe('#tokens.js', () => {
       assert.property(tokenInfo[0], 'qty')
     })
 
-    it('should return info on NFTs', async () => {
-      const addr = 'bitcoincash:qzjs5l0a3gvmfuqw9szs4glzpf4j63jjkvfj9hqedl'
+    it('should return tokens held by an etoken address', async () => {
+      const addr = 'etoken:qrndyd5v3c9c6xzjt9hhymq8gtf6a6p8ky2ml647a5'
 
       const tokenInfo = await uut.listTokensFromAddress(addr)
       // console.log(`tokenInfo: ${JSON.stringify(tokenInfo, null, 2)}`)
 
-      assert.equal(tokenInfo[0].tokenType, 65)
+      assert.isArray(tokenInfo)
+
+      assert.property(tokenInfo[0], 'tokenId')
+      assert.property(tokenInfo[0], 'ticker')
+      assert.property(tokenInfo[0], 'name')
+      assert.property(tokenInfo[0], 'decimals')
+      assert.property(tokenInfo[0], 'tokenType')
+      assert.property(tokenInfo[0], 'url')
+      assert.property(tokenInfo[0], 'qty')
     })
+
+    // it('should return info on NFTs', async () => {
+    //   const addr = 'bitcoincash:qzjs5l0a3gvmfuqw9szs4glzpf4j63jjkvfj9hqedl'
+    //
+    //   const tokenInfo = await uut.listTokensFromAddress(addr)
+    //   // console.log(`tokenInfo: ${JSON.stringify(tokenInfo, null, 2)}`)
+    //
+    //   assert.equal(tokenInfo[0].tokenType, 65)
+    // })
   })
 })
